@@ -1,21 +1,30 @@
-//import ORM
-var orm = require('../config/orm.js');
+// Burger model
+// (created on the command line)
+// =============================
 
-//code that will call the ORM functions using burger specific input for the ORM.
-var burger = {
-    all: function(cb) {
-        orm.all('burgers', function(res){
-            cb(res)
-        });
-    },
-    create: function(name,cb) {
-        orm.create('burgers', ['burger_name', 'devoured'], [name, false], cb);
-    },
-    update: function(id, cb) {
-        var condition = 'id=' + id;
-        orm.update('burgers', {devoured : true}, condition, cb);
+// Note: Since sequelize-cli lacks the option 
+// to designate default values for our attributes,
+// we still need to add in a line to give devoured
+// a default value of false.
+// We need to do the same on the associated migration file
+// that the cli created in tandem with this model.
+
+'use strict';
+
+
+module.exports = function(sequelize, DataTypes) {
+  var burgers = sequelize.define('burgers', {
+    burger_name: DataTypes.STRING,
+    devoured: {
+    	type: DataTypes.BOOLEAN,
+    	defaultValue: false // only line we needed to add.
     }
+  }, {
+    classMethods: {
+      associate: function(models) {
+        // associations can be defined here
+      }
+    }
+  });
+  return burgers;
 };
-
-//export burger
-module.exports = burger;
